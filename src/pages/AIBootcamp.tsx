@@ -242,7 +242,7 @@ const faqs = [
         <div className='md:max-w-[1350px] mx-auto px-6'>
             <div className='text-center mb-4'>
             <p className='text-[#8F2436] bg-[#8F24361A] rounded-4xl py-2 px-5 text-[14px] text-center inline-block'>What Students Will Learn</p>
-            <h1 className='font-bold md:text-[40px] text-[20px] text-[#301D20] [font-family:Playfair_Display,serif]'>5-Day Curriculum Breakdown</h1>
+            <h1 className='font-bold md:text-[40px] text-[20px] text-[#301D20] [font-family:Playfair_Display,serif]'>3-Day Curriculum Breakdown</h1>
             <p className='text-[#7E676B] md:text-[15px] text-[14px]'>A structured, engaging journey from AI basics to hands-on project creation</p>
             </div>
         </div>
