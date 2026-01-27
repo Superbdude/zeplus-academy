@@ -1,0 +1,58 @@
+.insider-page{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#CECECE;
+  padding:3rem 1rem;
+  z-index:9999;
+  overflow:auto;
+}
+.insider-card{
+  width:100%;
+  max-width:1100px;
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.08);
+  
+  position:relative;
+  max-height: calc(100vh - 48px);
+  overflow:auto;
+}
+.insider-close{
+  position:absolute;
+  right:16px;
+  top:12px;
+  border:0;
+  background:transparent;
+  font-size:22px;
+  cursor:pointer;
+}
+.insider-body{
+  display:flex;
+  gap:2rem;
+  align-items:center;
+}
+.insider-left{
+  flex:1 1 45%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.insider-left img{max-width:100%;height:auto;display:block}
+.insider-right{
+  flex:1 1 55%;
+}
+.insider-title{margin:0 0 12px;color:#2b2140}
+.insider-bullets{list-style:none;padding:0;margin:0 0 18px}
+.insider-bullets li{margin-bottom:8px;color:#6b6b6b}
+
+.insider-form input{padding:12px;border-radius:6px;border:1px solid #d0cece}
+.insider-submit{padding:12px;border-radius:6px;background:#cfcfcf;border:0;color:#fff;cursor:pointer}
+
+@media (max-width:860px){
+  .insider-body{flex-direction:column}
+  .insider-left{order:1}
+  .insider-right{order:2}
+}
