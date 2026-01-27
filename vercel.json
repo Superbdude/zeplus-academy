@@ -4,21 +4,11 @@
   "installCommand": "npm install",
   "framework": "vite",
   "outputDirectory": "dist",
-  "routes": [
+  "cleanUrls": true,
+  "rewrites": [
     {
-      "src": "/assets/.*",
-      "dest": "/assets/$1",
-      "status": 200
-    },
-    {
-      "src": "/.*\\..*",
-      "dest": "/$1",
-      "status": 200
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html",
-      "status": 200
+      "source": "/(?!.*\\.(?:js|css|png|jpg|jpeg|svg|gif|woff|woff2|ttf|eot|ico)$).*",
+      "destination": "/index.html"
     }
   ]
 }
