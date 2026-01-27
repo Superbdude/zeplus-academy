@@ -61,13 +61,14 @@ const App = () => {
     if (isAdminPath) return
 
     // navigate to the Insider page every 1 minute (60000 ms) - only for non-admin users
-    const showInsider = () => {
-      if (location.pathname !== '/insider') navigate('/insider')
-    }
+    // Temporarily disable the insider popup for debugging
+    // const showInsider = () => {
+    //   if (location.pathname !== '/insider') navigate('/insider')
+    // }
 
-    intervalRef.current = window.setInterval(() => {
-      showInsider()
-    }, 1 * 60 * 1000)
+    // intervalRef.current = window.setInterval(() => {
+    //   showInsider()
+    // }, 1 * 60 * 1000)
 
     return () => {
       if (intervalRef.current) window.clearInterval(intervalRef.current)
