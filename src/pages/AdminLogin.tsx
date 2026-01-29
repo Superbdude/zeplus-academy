@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import bg from '../assets/images/adminbg.png'
-import { authenticateUser, setCurrentUser } from '../utils/userManagement'
+import { userLogin } from '../services/userAuthService'
 
 const AdminLogin = () => {
   const navigate = useNavigate()
@@ -10,17 +10,21 @@ const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
     setError('')
 
-    const user = authenticateUser(email, password)
-    
-    if (user) {
-      setCurrentUser(user)
-      navigate('/admin')
-    } else {
-      setError('Invalid email or password, or account is suspended')
+    try {
+      const response = await userLogin(email, password)
+
+      if (response.token && response.user) {
+        navigate('/admin')
+      } else {
+        setError('Login failed. Please check your credentials.')
+      }
+    } catch (err: any) {
+      console.error('Login error:', err)
+      setError(err.message || 'Login failed. Please try again.')
     }
   }
 

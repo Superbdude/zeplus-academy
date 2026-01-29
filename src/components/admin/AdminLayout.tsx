@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import AdminSidebar from './AdminSidebar'
 import { Outlet, useNavigate } from 'react-router-dom'
-import { getCurrentUser } from '../../utils/userManagement'
+import { getCurrentUser } from '../../services/userAuthService'
+import type { User } from '../../services/userAuthService'
 import { getUnconfirmedCount, getFormTypesWithUnconfirmed, getUnconfirmedCountPerFormType } from '../../utils/notifications'
 import { startHeartbeat } from '../../utils/onlineStatus'
-import type { User } from '../../utils/userManagement'
 
 const AdminLayout: React.FC = () => {
   const navigate = useNavigate()
@@ -295,17 +295,9 @@ const AdminLayout: React.FC = () => {
                   onClick={() => navigate('/admin/settings')}
                   className="flex items-center gap-2 hover:bg-gray-100 rounded-full transition-colors p-1"
                 >
-                  {currentUser?.profilePicture ? (
-                    <img
-                      src={currentUser.profilePicture}
-                      alt="Profile"
-                      className="w-10 h-10 rounded-full object-cover border-2 border-gray-200"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center font-semibold text-sm">
-                      {getUserInitials()}
-                    </div>
-                  )}
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center font-semibold text-sm">
+                    {getUserInitials()}
+                  </div>
                 </button>
               </div>
             </div>

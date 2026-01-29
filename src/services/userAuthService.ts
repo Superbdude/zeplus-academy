@@ -1,13 +1,15 @@
 import { API_CONFIG, apiCall, authenticatedApiCall } from '../config/api'
 
+export interface User {
+  id: string
+  email: string
+  firstName?: string
+  lastName?: string
+}
+
 export interface LoginResponse {
   token?: string
-  user?: {
-    id: string
-    email: string
-    firstName: string
-    lastName: string
-  }
+  user?: User
   message?: string
 }
 
