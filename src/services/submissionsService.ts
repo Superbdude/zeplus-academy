@@ -452,12 +452,25 @@ export const fetchDashboardMetrics = async (): Promise<any> => {
       fetchSchoolSubmissions().catch(() => []),
     ])
 
+    // Ensure each result is an array, even if API returns unexpected data
+    const ensureArray = (data: any): any[] => {
+      if (Array.isArray(data)) return data
+      console.warn('API returned non-array data:', data)
+      return []
+    }
+
+    const insidersArray = ensureArray(insiders)
+    const coursesArray = ensureArray(courses)
+    const tech4teensArray = ensureArray(tech4teens)
+    const partnersArray = ensureArray(partners)
+    const schoolsArray = ensureArray(schools)
+
     // Filter out null/undefined items from each array
-    const filteredInsiders = insiders.filter(item => item && typeof item === 'object')
-    const filteredCourses = courses.filter(item => item && typeof item === 'object')
-    const filteredTech4teens = tech4teens.filter(item => item && typeof item === 'object')
-    const filteredPartners = partners.filter(item => item && typeof item === 'object')
-    const filteredSchools = schools.filter(item => item && typeof item === 'object')
+    const filteredInsiders = insidersArray.filter(item => item && typeof item === 'object')
+    const filteredCourses = coursesArray.filter(item => item && typeof item === 'object')
+    const filteredTech4teens = tech4teensArray.filter(item => item && typeof item === 'object')
+    const filteredPartners = partnersArray.filter(item => item && typeof item === 'object')
+    const filteredSchools = schoolsArray.filter(item => item && typeof item === 'object')
 
     return {
       totalForms: filteredInsiders.length + filteredCourses.length + filteredTech4teens.length + filteredPartners.length + filteredSchools.length,
@@ -493,12 +506,19 @@ export const fetchSubmissionsByCategory = async (): Promise<Record<string, Submi
       fetchSchoolSubmissions().catch(() => []),
     ])
 
+    // Ensure each result is an array
+    const ensureArray = (data: any): Submission[] => {
+      if (Array.isArray(data)) return data
+      console.warn('API returned non-array data:', data)
+      return []
+    }
+
     return {
-      insider: insiders,
-      courses: courses,
-      tech4teen: tech4teens,
-      partner: partners,
-      school: schools,
+      insider: ensureArray(insiders),
+      courses: ensureArray(courses),
+      tech4teen: ensureArray(tech4teens),
+      partner: ensureArray(partners),
+      school: ensureArray(schools),
     }
   } catch (error) {
     console.error('Failed to fetch submissions by category:', error)
