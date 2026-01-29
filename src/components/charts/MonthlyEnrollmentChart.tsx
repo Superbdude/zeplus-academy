@@ -19,6 +19,9 @@ const MonthlyEnrollmentChart = ({ submissions }: MonthlyEnrollmentChartProps) =>
 
     // Count submissions by month (aggregate across years)
     allItems.forEach((item: any) => {
+      // Skip undefined/null items
+      if (!item || typeof item !== 'object') return
+
       const date = new Date(item.createdAt || Date.now())
       if (Number.isNaN(date.getTime())) return
       const monthIndex = date.getMonth()

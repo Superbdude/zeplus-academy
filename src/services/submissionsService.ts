@@ -452,14 +452,27 @@ export const fetchDashboardMetrics = async (): Promise<any> => {
       fetchSchoolSubmissions().catch(() => []),
     ])
 
+    // Filter out null/undefined items from each array
+    const filteredInsiders = insiders.filter(item => item && typeof item === 'object')
+    const filteredCourses = courses.filter(item => item && typeof item === 'object')
+    const filteredTech4teens = tech4teens.filter(item => item && typeof item === 'object')
+    const filteredPartners = partners.filter(item => item && typeof item === 'object')
+    const filteredSchools = schools.filter(item => item && typeof item === 'object')
+
     return {
-      totalForms: insiders.length + courses.length + tech4teens.length + partners.length + schools.length,
-      insiderForms: insiders.length,
-      courseBrochureForms: courses.length,
-      techForTeen: tech4teens.length,
-      generalPartnership: partners.length,
-      schoolPartnership: schools.length,
+      totalForms: filteredInsiders.length + filteredCourses.length + filteredTech4teens.length + filteredPartners.length + filteredSchools.length,
+      insiderForms: filteredInsiders.length,
+      courseBrochureForms: filteredCourses.length,
+      techForTeen: filteredTech4teens.length,
+      generalPartnership: filteredPartners.length,
+      schoolPartnership: filteredSchools.length,
       aiBootcamp: 0, // Not in current API structure
+      // Also return the filtered data for the chart component
+      insider: filteredInsiders,
+      courses: filteredCourses,
+      tech4teen: filteredTech4teens,
+      partner: filteredPartners,
+      school: filteredSchools,
     }
   } catch (error) {
     console.error('Failed to fetch dashboard metrics:', error)
