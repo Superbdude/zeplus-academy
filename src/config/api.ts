@@ -1,5 +1,5 @@
 // API configuration for connecting to the backend
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://zeplus.onrender.com/api/v1'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://zeplus-6wid.onrender.com/api/v1'
 
 export const API_CONFIG = {
   BASE_URL: API_BASE_URL,
