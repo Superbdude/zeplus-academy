@@ -147,14 +147,6 @@ const AdminLogin = () => {
             Forgot your password?
           </a>
         </div>
-
-        <div className="mt-6 p-3 bg-gray-100 rounded text-xs text-gray-600">
-          <strong>Default Login:</strong>
-          <br />
-          Email: superadmin@zeplusacademy.com
-          <br />
-          Password: Admin@123
-        </div>
       </div>
     </div>
   )
