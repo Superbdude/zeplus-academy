@@ -5,6 +5,7 @@ import { getCurrentUser } from '../../services/userAuthService'
 import type { User } from '../../services/userAuthService'
 import { getUnconfirmedCount, getFormTypesWithUnconfirmed, getUnconfirmedCountPerFormType } from '../../utils/notifications'
 import { startHeartbeat } from '../../utils/onlineStatus'
+import { syncLocalStorageToBackend } from '../../utils/syncService'
 
 const AdminLayout: React.FC = () => {
   const navigate = useNavigate()
@@ -24,6 +25,9 @@ const AdminLayout: React.FC = () => {
     }
 
     setCurrentUser(user)
+
+    // Sync any localStorage submissions to backend
+    syncLocalStorageToBackend()
 
     // Start heartbeat for online status tracking
     let cleanupHeartbeat: (() => void) | undefined

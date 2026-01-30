@@ -1,4 +1,3 @@
-import { API_CONFIG, apiCall } from '../config/api'
 import {
   createInsiderSubmission,
   createCourseSubmission,
@@ -15,23 +14,6 @@ export type SubmissionRecord = {
 
 const STORAGE_KEY = 'zeplus_submissions'
 const USE_BACKEND = true // Re-enable backend
-
-// Map form types to backend endpoints
-const getEndpointForFormType = (formType: string): string => {
-  const formTypeLower = formType.toLowerCase()
-  
-  if (formTypeLower === 'insider') return API_CONFIG.ENDPOINTS.INSIDER
-  if (formTypeLower.includes('course') || formTypeLower.includes('bootcamp') || 
-      ['frontend', 'cybersecurity', 'data', 'deeplearning', 'generative', 'introai', 'uidesign', 'fullstack', 'digital', 'gamedevelopment', 'aimachine', 'introweb', 'introcybersecurity', 'cybersecurityai'].includes(formTypeLower)) {
-    return API_CONFIG.ENDPOINTS.COURSES
-  }
-  if (formTypeLower === 'tech4teen') return API_CONFIG.ENDPOINTS.TECH4TEEN
-  if (formTypeLower === 'schoolpartner' || formTypeLower === 'school') return API_CONFIG.ENDPOINTS.SCHOOL
-  if (formTypeLower === 'becomepartner' || formTypeLower === 'partner') return API_CONFIG.ENDPOINTS.PARTNER
-  
-  // Default to courses for unknown types
-  return API_CONFIG.ENDPOINTS.COURSES
-}
 
 export const saveSubmission = async (formType: string, data: any) => {
   try {
