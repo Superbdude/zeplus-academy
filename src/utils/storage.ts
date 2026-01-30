@@ -1,4 +1,11 @@
 import { API_CONFIG, apiCall } from '../config/api'
+import {
+  createInsiderSubmission,
+  createCourseSubmission,
+  createTech4TeenSubmission,
+  createPartnerSubmission,
+  createSchoolSubmission,
+} from '../services/submissionsService'
 
 export type SubmissionRecord = {
   id: number
@@ -7,7 +14,7 @@ export type SubmissionRecord = {
 }
 
 const STORAGE_KEY = 'zeplus_submissions'
-const USE_BACKEND = true // Set to false to use localStorage only
+const USE_BACKEND = true // Re-enable backend
 
 // Map form types to backend endpoints
 const getEndpointForFormType = (formType: string): string => {
@@ -31,16 +38,23 @@ export const saveSubmission = async (formType: string, data: any) => {
     // Try to save to backend first
     if (USE_BACKEND) {
       try {
-        const endpoint = getEndpointForFormType(formType)
-        const response = await apiCall(endpoint, {
-          method: 'POST',
-          body: JSON.stringify({
-            formType,
-            data,
-            timestamp: new Date().toISOString(),
-          }),
-        })
-        
+        let response
+
+        // Use specific backend submission functions based on form type
+        const formTypeLower = formType.toLowerCase()
+        if (formTypeLower === 'insider') {
+          response = await createInsiderSubmission(data)
+        } else if (formTypeLower === 'tech4teen') {
+          response = await createTech4TeenSubmission(data)
+        } else if (formTypeLower === 'schoolpartner' || formTypeLower === 'school') {
+          response = await createSchoolSubmission(data)
+        } else if (formTypeLower === 'becomepartner' || formTypeLower === 'partner') {
+          response = await createPartnerSubmission(data)
+        } else {
+          // Default to course submission for all other types
+          response = await createCourseSubmission(data)
+        }
+
         // If backend success, also save to localStorage as fallback
         saveToLocalStorage(formType, data)
         window.dispatchEvent(new Event('zeplus:submission'))
