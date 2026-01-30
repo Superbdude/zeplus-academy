@@ -6,9 +6,16 @@ const Leads = () => {
   const [submissions, setSubmissions] = useState<Record<string, any[]>>({})
 
   useEffect(() => {
-    setSubmissions(getAllSubmissions())
+    const loadData = async () => {
+      const allSubs = await getAllSubmissions()
+      setSubmissions(allSubs as any)
+    }
+    loadData()
 
-    const handler = () => setSubmissions(getAllSubmissions())
+    const handler = async () => {
+      const allSubs = await getAllSubmissions()
+      setSubmissions(allSubs as any)
+    }
     window.addEventListener('zeplus:submission', handler)
     return () => window.removeEventListener('zeplus:submission', handler)
   }, [])

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import type { SubmissionRecord } from '../utils/storage'
 import SubmissionModal from './SubmissionModal'
 
-type Flat = { id: number; createdAt: string; formType?: string; flatData: Record<string, any> }
+type Flat = { id: string | number; createdAt: string; formType?: string; flatData: Record<string, any> }
 
 const flatten = (obj: any, prefix = ''): Record<string, any> => {
   const out: Record<string, any> = {}

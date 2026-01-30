@@ -7,13 +7,16 @@ const InsiderForms = () => {
   const [statusFilter, setStatusFilter] = useState('All Status')
 
   useEffect(() => {
-    const allSubs = getAllSubmissions()
-    const insiderSubs = allSubs['insider'] || []
-    setSubmissions(insiderSubs)
+    const loadData = async () => {
+      const allSubs = await getAllSubmissions()
+      const insiderSubs = (allSubs as any)['insider'] || []
+      setSubmissions(insiderSubs)
+    }
+    loadData()
 
-    const handler = () => {
-      const updated = getAllSubmissions()
-      setSubmissions(updated['insider'] || [])
+    const handler = async () => {
+      const updated = await getAllSubmissions()
+      setSubmissions((updated as any)['insider'] || [])
     }
     window.addEventListener('zeplus:submission', handler)
     return () => window.removeEventListener('zeplus:submission', handler)

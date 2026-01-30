@@ -4,52 +4,36 @@ import {
   createTech4TeenSubmission,
   createPartnerSubmission,
   createSchoolSubmission,
+  fetchInsiderSubmissions,
+  fetchCourseSubmissions,
+  fetchTech4TeenSubmissions,
+  fetchPartnerSubmissions,
+  fetchSchoolSubmissions,
+  updateInsiderStatus,
+  updateCourseStatus,
+  updateTech4TeenStatus,
+  updatePartnerStatus,
+  updateSchoolStatus,
+  type Submission,
 } from '../services/submissionsService'
 
-export type SubmissionRecord = {
-  id: number
-  createdAt: string
-  data: any
-}
-
-const STORAGE_KEY = 'zeplus_submissions'
-const USE_BACKEND = true // Re-enable backend
+export type SubmissionRecord = Submission
 
 export const saveSubmission = async (formType: string, data: any) => {
   try {
-    // Try to save to backend first
-    if (USE_BACKEND) {
-      try {
-        let response
-
-        // Use specific backend submission functions based on form type
-        const formTypeLower = formType.toLowerCase()
-        if (formTypeLower === 'insider') {
-          response = await createInsiderSubmission(data)
-        } else if (formTypeLower === 'tech4teen') {
-          response = await createTech4TeenSubmission(data)
-        } else if (formTypeLower === 'schoolpartner' || formTypeLower === 'school') {
-          response = await createSchoolSubmission(data)
-        } else if (formTypeLower === 'becomepartner' || formTypeLower === 'partner') {
-          response = await createPartnerSubmission(data)
-        } else {
-          // Default to course submission for all other types
-          response = await createCourseSubmission(data)
-        }
-
-        // If backend success, also save to localStorage as fallback
-        saveToLocalStorage(formType, data)
-        window.dispatchEvent(new Event('zeplus:submission'))
-        return response
-      } catch (backendError) {
-        console.warn('Backend submission failed, falling back to localStorage:', backendError)
-        // Fall back to localStorage if backend fails
-        saveToLocalStorage(formType, data)
-        window.dispatchEvent(new Event('zeplus:submission'))
-      }
+    // Submit directly to backend - no localStorage fallback
+    const formTypeLower = formType.toLowerCase()
+    if (formTypeLower === 'insider') {
+      return await createInsiderSubmission(data)
+    } else if (formTypeLower === 'tech4teen') {
+      return await createTech4TeenSubmission(data)
+    } else if (formTypeLower === 'schoolpartner' || formTypeLower === 'school') {
+      return await createSchoolSubmission(data)
+    } else if (formTypeLower === 'becomepartner' || formTypeLower === 'partner') {
+      return await createPartnerSubmission(data)
     } else {
-      saveToLocalStorage(formType, data)
-      window.dispatchEvent(new Event('zeplus:submission'))
+      // Default to course submission for all other types
+      return await createCourseSubmission(data)
     }
   } catch (err) {
     console.error('saveSubmission error:', err)
@@ -57,54 +41,69 @@ export const saveSubmission = async (formType: string, data: any) => {
   }
 }
 
-const saveToLocalStorage = (formType: string, data: any) => {
-  const raw = localStorage.getItem(STORAGE_KEY) || '{}'
-  const all = JSON.parse(raw) as Record<string, SubmissionRecord[]>
-  if (!all[formType]) all[formType] = []
-  all[formType].push({ id: Date.now(), createdAt: new Date().toISOString(), data })
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(all))
-}
-
-export const getAllSubmissions = (): Record<string, SubmissionRecord[]> => {
+// Export all fetch and update functions for use in admin components
+export const getAllSubmissions = async () => {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
-  } catch (err) {
-    return {}
+    const [insider, courses, tech4teen, partner, school] = await Promise.all([
+      fetchInsiderSubmissions(),
+      fetchCourseSubmissions(),
+      fetchTech4TeenSubmissions(),
+      fetchPartnerSubmissions(),
+      fetchSchoolSubmissions(),
+    ])
+
+    return {
+      insider: insider.map(item => ({ ...item, id: item.id, createdAt: item.createdAt })),
+      courses: courses.map(item => ({ ...item, id: item.id, createdAt: item.createdAt })),
+      tech4teen: tech4teen.map(item => ({ ...item, id: item.id, createdAt: item.createdAt })),
+      partner: partner.map(item => ({ ...item, id: item.id, createdAt: item.createdAt })),
+      school: school.map(item => ({ ...item, id: item.id, createdAt: item.createdAt })),
+      becomepartner: partner.map(item => ({ ...item, id: item.id, createdAt: item.createdAt })),
+      schoolpartner: school.map(item => ({ ...item, id: item.id, createdAt: item.createdAt })),
+      Tech4teen: tech4teen.map(item => ({ ...item, id: item.id, createdAt: item.createdAt })),
+      aibootcamp: [], // No separate AI bootcamp endpoint
+    }
+  } catch (error) {
+    console.error('Failed to fetch submissions:', error)
+    return {
+      insider: [],
+      courses: [],
+      tech4teen: [],
+      partner: [],
+      school: [],
+      becomepartner: [],
+      schoolpartner: [],
+      Tech4teen: [],
+      aibootcamp: [],
+    }
   }
 }
 
-export const clearSubmissions = (formType?: string) => {
+export const confirmSubmission = async (formType: string, submissionId: string | number) => {
   try {
-    if (!formType) {
-      localStorage.removeItem(STORAGE_KEY)
-      return
+    switch (formType.toLowerCase()) {
+      case 'insider':
+        await updateInsiderStatus(submissionId, 'Confirmed')
+        break
+      case 'courses':
+      case 'course-brochure':
+        await updateCourseStatus(submissionId, 'Confirmed')
+        break
+      case 'tech4teen':
+        await updateTech4TeenStatus(submissionId, 'Confirmed')
+        break
+      case 'partner':
+      case 'becomepartner':
+        await updatePartnerStatus(submissionId, 'Confirmed')
+        break
+      case 'school':
+      case 'schoolpartner':
+        await updateSchoolStatus(submissionId, 'Confirmed')
+        break
+      default:
+        console.warn('Unknown form type for confirmation:', formType)
     }
-    const all = getAllSubmissions()
-    delete all[formType]
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(all))
-  } catch (err) {
-    // no-op
-  }
-}
-
-// Confirm a submission by ID
-export const confirmSubmission = (formType: string, submissionId: number) => {
-  try {
-    const all = getAllSubmissions()
-    if (!all[formType]) return
-    
-    const submissions = all[formType]
-    const index = submissions.findIndex(s => s.id === submissionId)
-    
-    if (index >= 0) {
-      submissions[index].data = {
-        ...submissions[index].data,
-        status: 'Confirmed'
-      }
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(all))
-      window.dispatchEvent(new Event('zeplus:submission'))
-    }
-  } catch (err) {
-    console.error('confirmSubmission error', err)
+  } catch (error) {
+    console.error('Failed to confirm submission:', error)
   }
 }

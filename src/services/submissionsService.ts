@@ -1,4 +1,4 @@
-import { API_CONFIG, apiCall, authenticatedApiCall } from '../config/api'
+import { API_CONFIG, authenticatedApiCall } from '../config/api'
 
 export interface Submission {
   id: string | number
@@ -67,8 +67,7 @@ export const fetchInsiderSubmissions = async (): Promise<Submission[]> => {
  */
 export const createInsiderSubmission = async (data: any): Promise<Submission> => {
   try {
-    // Public submissions don't require authentication
-    return await apiCall(API_CONFIG.ENDPOINTS.INSIDER_CREATE, {
+    return await authenticatedApiCall(API_CONFIG.ENDPOINTS.INSIDER_CREATE, {
       method: 'POST',
       body: JSON.stringify(data),
     })
@@ -142,8 +141,7 @@ export const fetchCourseSubmissions = async (): Promise<Submission[]> => {
  */
 export const createCourseSubmission = async (data: any): Promise<Submission> => {
   try {
-    // Public submissions don't require authentication
-    return await apiCall(API_CONFIG.ENDPOINTS.COURSES_CREATE, {
+    return await authenticatedApiCall(API_CONFIG.ENDPOINTS.COURSES_CREATE, {
       method: 'POST',
       body: JSON.stringify(data),
     })
@@ -217,8 +215,7 @@ export const fetchTech4TeenSubmissions = async (): Promise<Submission[]> => {
  */
 export const createTech4TeenSubmission = async (data: any): Promise<Submission> => {
   try {
-    // Public submissions don't require authentication
-    return await apiCall(API_CONFIG.ENDPOINTS.TECH4TEEN_CREATE, {
+    return await authenticatedApiCall(API_CONFIG.ENDPOINTS.TECH4TEEN_CREATE, {
       method: 'POST',
       body: JSON.stringify(data),
     })
@@ -292,8 +289,7 @@ export const fetchPartnerSubmissions = async (): Promise<Submission[]> => {
  */
 export const createPartnerSubmission = async (data: any): Promise<Submission> => {
   try {
-    // Public submissions don't require authentication
-    return await apiCall(API_CONFIG.ENDPOINTS.PARTNER_CREATE, {
+    return await authenticatedApiCall(API_CONFIG.ENDPOINTS.PARTNER_CREATE, {
       method: 'POST',
       body: JSON.stringify(data),
     })
@@ -383,8 +379,7 @@ export const fetchSchoolSubmissions = async (): Promise<Submission[]> => {
  */
 export const createSchoolSubmission = async (data: any): Promise<Submission> => {
   try {
-    // Public submissions don't require authentication
-    return await apiCall(API_CONFIG.ENDPOINTS.SCHOOL_CREATE, {
+    return await authenticatedApiCall(API_CONFIG.ENDPOINTS.SCHOOL_CREATE, {
       method: 'POST',
       body: JSON.stringify(data),
     })

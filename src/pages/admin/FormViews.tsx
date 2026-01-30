@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react'
-import { getAllSubmissions, confirmSubmission } from '../../utils/storage'
+import {
+  getAllSubmissions,
+  confirmSubmission,
+} from '../../utils/storage'
 
 // Insider Forms Component (Special layout)
 export const InsiderForms = () => {
@@ -12,13 +15,15 @@ export const InsiderForms = () => {
   }
 
   useEffect(() => {
-    const allSubs = getAllSubmissions()
-    const insiderSubs = allSubs['insider'] || []
-    setSubmissions(insiderSubs)
+    const loadData = async () => {
+      const allSubs = await getAllSubmissions()
+      setSubmissions((allSubs as any).insider || [])
+    }
+    loadData()
 
-    const handler = () => {
-      const updated = getAllSubmissions()
-      setSubmissions(updated['insider'] || [])
+    const handler = async () => {
+      const updated = await getAllSubmissions()
+      setSubmissions((updated as any).insider || [])
     }
     window.addEventListener('zeplus:submission', handler)
     return () => window.removeEventListener('zeplus:submission', handler)
@@ -207,13 +212,15 @@ const FormViewPage = ({ formType, title, storageKey }: FormPageProps) => {
   }
 
   useEffect(() => {
-    const allSubs = getAllSubmissions()
-    const formSubs = allSubs[storageKey] || []
-    setSubmissions(formSubs)
+    const loadData = async () => {
+      const allSubs = await getAllSubmissions()
+      setSubmissions((allSubs as any)[storageKey] || [])
+    }
+    loadData()
 
-    const handler = () => {
-      const updated = getAllSubmissions()
-      setSubmissions(updated[storageKey] || [])
+    const handler = async () => {
+      const updated = await getAllSubmissions()
+      setSubmissions((updated as any)[storageKey] || [])
     }
     window.addEventListener('zeplus:submission', handler)
     return () => window.removeEventListener('zeplus:submission', handler)
@@ -416,22 +423,25 @@ export const CourseBrochureForms = () => {
   ]
 
   useEffect(() => {
-    const allSubs = getAllSubmissions()
-    // Aggregate all course submissions and tag source formType
-    let courseSubs: any[] = []
-    courseKeys.forEach(key => {
-      const subs = allSubs[key] || []
-      courseSubs = [...courseSubs, ...subs.map((s: any) => ({ ...s, formType: key }))]
-    })
-    // Sort by date (newest first)
-    courseSubs.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    setSubmissions(courseSubs)
+    const loadData = async () => {
+      const allSubs = await getAllSubmissions()
+      // Aggregate all course submissions and tag source formType
+      let courseSubs: any[] = []
+      courseKeys.forEach(key => {
+        const subs = (allSubs as any)[key] || []
+        courseSubs = [...courseSubs, ...subs.map((s: any) => ({ ...s, formType: key }))]
+      })
+      // Sort by date (newest first)
+      courseSubs.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      setSubmissions(courseSubs)
+    }
+    loadData()
 
-    const handler = () => {
-      const updated = getAllSubmissions()
+    const handler = async () => {
+      const updated = await getAllSubmissions()
       let updatedSubs: any[] = []
       courseKeys.forEach(key => {
-        const subs = updated[key] || []
+        const subs = (updated as any)[key] || []
         updatedSubs = [...updatedSubs, ...subs.map((s: any) => ({ ...s, formType: key }))]
       })
       updatedSubs.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -638,12 +648,15 @@ export const BecomePartnerForms = () => {
   }
 
   useEffect(() => {
-    const allSubs = getAllSubmissions()
-    setSubmissions(allSubs['becomepartner'] || [])
+    const loadData = async () => {
+      const allSubs = await getAllSubmissions()
+      setSubmissions((allSubs as any).becomepartner || [])
+    }
+    loadData()
 
-    const handler = () => {
-      const updated = getAllSubmissions()
-      setSubmissions(updated['becomepartner'] || [])
+    const handler = async () => {
+      const updated = await getAllSubmissions()
+      setSubmissions((updated as any).becomepartner || [])
     }
     window.addEventListener('zeplus:submission', handler)
     return () => window.removeEventListener('zeplus:submission', handler)
@@ -832,12 +845,15 @@ export const SchoolPartnershipForms = () => {
   }
 
   useEffect(() => {
-    const allSubs = getAllSubmissions()
-    setSubmissions(allSubs['schoolpartner'] || [])
+    const loadData = async () => {
+      const allSubs = await getAllSubmissions()
+      setSubmissions((allSubs as any).schoolpartner || [])
+    }
+    loadData()
 
-    const handler = () => {
-      const updated = getAllSubmissions()
-      setSubmissions(updated['schoolpartner'] || [])
+    const handler = async () => {
+      const updated = await getAllSubmissions()
+      setSubmissions((updated as any).schoolpartner || [])
     }
     window.addEventListener('zeplus:submission', handler)
     return () => window.removeEventListener('zeplus:submission', handler)
@@ -1207,13 +1223,15 @@ export const Tech4teenForms = () => {
   }
 
   useEffect(() => {
-    const allSubs = getAllSubmissions()
-    const tech4teenSubs = allSubs['Tech4teen'] || []
-    setSubmissions(tech4teenSubs)
+    const loadData = async () => {
+      const allSubs = await getAllSubmissions()
+      setSubmissions((allSubs as any).Tech4teen || [])
+    }
+    loadData()
 
-    const handler = () => {
-      const updated = getAllSubmissions()
-      setSubmissions(updated['Tech4teen'] || [])
+    const handler = async () => {
+      const updated = await getAllSubmissions()
+      setSubmissions((updated as any).Tech4teen || [])
     }
     window.addEventListener('zeplus:submission', handler)
     return () => window.removeEventListener('zeplus:submission', handler)
@@ -1406,12 +1424,15 @@ export const AIBootcampForms = () => {
   }
 
   useEffect(() => {
-    const allSubs = getAllSubmissions()
-    setSubmissions(allSubs['aibootcamp'] || [])
+    const loadData = async () => {
+      const allSubs = await getAllSubmissions()
+      setSubmissions((allSubs as any).aibootcamp || [])
+    }
+    loadData()
 
-    const handler = () => {
-      const updated = getAllSubmissions()
-      setSubmissions(updated['aibootcamp'] || [])
+    const handler = async () => {
+      const updated = await getAllSubmissions()
+      setSubmissions((updated as any).aibootcamp || [])
     }
     window.addEventListener('zeplus:submission', handler)
     return () => window.removeEventListener('zeplus:submission', handler)

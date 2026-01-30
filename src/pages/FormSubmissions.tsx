@@ -6,8 +6,16 @@ const FormSubmissions = () => {
   const [selectedFormType, setSelectedFormType] = useState<string>('all')
 
   useEffect(() => {
-    setSubmissions(getAllSubmissions())
-    const handler = () => setSubmissions(getAllSubmissions())
+    const loadData = async () => {
+      const allSubs = await getAllSubmissions()
+      setSubmissions(allSubs as any)
+    }
+    loadData()
+
+    const handler = async () => {
+      const allSubs = await getAllSubmissions()
+      setSubmissions(allSubs as any)
+    }
     window.addEventListener('zeplus:submission', handler)
     return () => window.removeEventListener('zeplus:submission', handler)
   }, [])
