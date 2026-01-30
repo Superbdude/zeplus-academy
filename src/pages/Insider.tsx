@@ -5,6 +5,7 @@ import envelope from '../assets/images/envellop.png'
 import './Insider.css'
 
 const Insider = () => {
+  // Phone number field for better lead qualification
   const navigate = useNavigate()
   const [first, setFirst] = useState('')
   const [last, setLast] = useState('')
