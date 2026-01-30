@@ -12,7 +12,7 @@ const Insider = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const payload = { first, last, email }
+    const payload = { firstName: first, lastName: last, email }
     try {
       saveSubmission('insider', payload)
     } catch (err) {

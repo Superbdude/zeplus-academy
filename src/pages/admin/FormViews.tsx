@@ -30,8 +30,8 @@ export const InsiderForms = () => {
   }, [])
 
   const filteredSubmissions = submissions.filter((sub: any) => {
-    const firstName = sub.data?.first || ''
-    const lastName = sub.data?.last || ''
+    const firstName = sub.data?.firstName || sub.data?.first || ''
+    const lastName = sub.data?.lastName || sub.data?.last || ''
     const email = sub.data?.email || ''
     const searchLower = searchTerm.toLowerCase()
     const statusValue = sub.data?.status || (sub.data?.confirmed ? 'Confirmed' : 'Unconfirmed')
@@ -53,8 +53,8 @@ export const InsiderForms = () => {
     const rows = filteredSubmissions.map((sub: any) => {
       const statusValue = sub.data?.status || (sub.data?.confirmed ? 'Confirmed' : 'Unconfirmed')
       return [
-        sub.data?.first || '',
-        sub.data?.last || '',
+        sub.data?.firstName || sub.data?.first || '',
+        sub.data?.lastName || sub.data?.last || '',
         sub.data?.email || '',
         new Date(sub.createdAt).toLocaleDateString(),
         statusValue
@@ -143,10 +143,10 @@ export const InsiderForms = () => {
                   return (
                     <tr key={sub.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{sub.data?.first || ''}</div>
+                        <div className="text-sm text-gray-900">{sub.data?.firstName || sub.data?.first || ''}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{sub.data?.last || ''}</div>
+                        <div className="text-sm text-gray-900">{sub.data?.lastName || sub.data?.last || ''}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm text-gray-900">{sub.data?.email || ''}</div>
