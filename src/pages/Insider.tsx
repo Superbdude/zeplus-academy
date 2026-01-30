@@ -9,10 +9,11 @@ const Insider = () => {
   const [first, setFirst] = useState('')
   const [last, setLast] = useState('')
   const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const payload = { firstName: first, lastName: last, email }
+    const payload = { firstName: first, lastName: last, email, phoneNumber: phone }
     try {
       saveSubmission('insider', payload)
     } catch (err) {
@@ -42,14 +43,15 @@ const Insider = () => {
               <input placeholder="First Name" className='' value={first} onChange={e => setFirst(e.target.value)} />
               <input placeholder="Last Name" value={last} onChange={e => setLast(e.target.value)} />
               <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-              <button 
-                type="submit" 
-                className="insider-submit" 
-                disabled={!first || !last || !email}
-                style={{ 
-                  background: (first && last && email) ? '#8F2436' : '#cfcfcf',
-                  cursor: (first && last && email) ? 'pointer' : 'not-allowed',
-                  opacity: (first && last && email) ? 1 : 0.7
+              <input placeholder="Phone Number" value={phone} onChange={e => setPhone(e.target.value)} />
+              <button
+                type="submit"
+                className="insider-submit"
+                disabled={!first || !last || !email || !phone}
+                style={{
+                  background: (first && last && email && phone) ? '#8F2436' : '#cfcfcf',
+                  cursor: (first && last && email && phone) ? 'pointer' : 'not-allowed',
+                  opacity: (first && last && email && phone) ? 1 : 0.7
                 }}
               >
                 Submit
